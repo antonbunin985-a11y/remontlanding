@@ -145,7 +145,12 @@ def main():
 
     REPORTS.mkdir(exist_ok=True)
     out = REPORTS / f"отчёт-{date.isoformat()}.html"
-    out.write_text(render(date, day, prev, prev_date), encoding="utf-8")
+    page = render(date, day, prev, prev_date)
+    out.write_text(page, encoding="utf-8")
+    # Главная страница сайта — самый свежий отчёт.
+    latest = max(p.name for p in REPORTS.glob("отчёт-*.html"))
+    if out.name == latest:
+        (REPORTS / "index.html").write_text(page, encoding="utf-8")
     print(f"Готово: {out}")
     if "--no-open" not in sys.argv:
         subprocess.run(["open", str(out)])
