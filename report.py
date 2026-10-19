@@ -13,9 +13,12 @@ import sys
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent
-DATA = ROOT / "data"
+# Записи за дни лежат в закрытом репозитории remontlanding-data (на Mac — ~/remontlanding-data),
+# оттуда они сами уходят на GitHub. Если такой папки нет (например, в GitHub Actions) — берём data/ рядом.
+ENTRIES = Path.home() / "remontlanding-data" / "data"
+DATA = ENTRIES if ENTRIES.is_dir() else ROOT / "data"
 REPORTS = ROOT / "reports"
-TEMPLATE = DATA / "_шаблон.txt"
+TEMPLATE = ROOT / "data" / "_шаблон.txt"
 
 SECTIONS = {"сделано": "done", "цифры": "metrics", "на сегодня": "today"}
 MONTHS = ["января", "февраля", "марта", "апреля", "мая", "июня", "июля",
